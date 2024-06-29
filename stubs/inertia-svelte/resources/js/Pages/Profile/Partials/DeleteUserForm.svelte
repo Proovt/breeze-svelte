@@ -21,7 +21,7 @@
     };
 
     const deleteUser = () => {
-        $form.delete(route("profile.destroy"), {
+        $form.delete(window.route("profile.destroy"), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
             onFinish: () => $form.reset(),

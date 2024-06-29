@@ -2,21 +2,25 @@
 
 namespace Laravel\Breeze\Console;
 
-use RuntimeException;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use function Laravel\Prompts\select;
-use Symfony\Component\Finder\Finder;
-use function Laravel\Prompts\confirm;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
-use function Laravel\Prompts\multiselect;
-use Symfony\Component\Process\PhpExecutableFinder;
-
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use RuntimeException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\select;
+
+
+#[AsCommand(name: 'breeze:install')]
 class InstallCommand extends Command implements PromptsForMissingInput
 {
     use InstallsApiStack, InstallsBladeStack, InstallsInertiaStacks;
@@ -116,6 +120,37 @@ class InstallCommand extends Command implements PromptsForMissingInput
                 )
             );
         }
+    }
+
+    /**
+     * Install the given middleware names into the application.
+     *
+     * @param  array|string  $name
+     * @param  string  $group
+     * @param  string  $modifier
+     * @return void
+     */
+    protected function installMiddleware($names, $group = 'web', $modifier = 'append')
+    {
+        $bootstrapApp = file_get_contents(base_path('bootstrap/app.php'));
+
+        $names = collect(Arr::wrap($names))
+            ->filter(fn ($name) => ! Str::contains($bootstrapApp, $name))
+            ->whenNotEmpty(function ($names) use ($bootstrapApp, $group, $modifier) {
+                $names = $names->map(fn ($name) => "$name")->implode(','.PHP_EOL.'            ');
+
+                $bootstrapApp = str_replace(
+                    '->withMiddleware(function (Middleware $middleware) {',
+                    '->withMiddleware(function (Middleware $middleware) {'
+                        .PHP_EOL."        \$middleware->$group($modifier: ["
+                        .PHP_EOL."            $names,"
+                        .PHP_EOL.'        ]);'
+                        .PHP_EOL,
+                    $bootstrapApp,
+                );
+
+                file_put_contents(base_path('bootstrap/app.php'), $bootstrapApp);
+            });
     }
 
     /**
@@ -334,8 +369,8 @@ class InstallCommand extends Command implements PromptsForMissingInput
 
         $input->setOption('pest', select(
             label: 'Which testing framework do you prefer?',
-            options: ['PHPUnit', 'Pest'], default
-            : $this->isUsingPest() ? 'Pest' : 'PHPUnit',
+            options: ['PHPUnit', 'Pest'], 
+            default: $this->isUsingPest() ? 'Pest' : 'PHPUnit',
         ) === 'Pest');
     }
 

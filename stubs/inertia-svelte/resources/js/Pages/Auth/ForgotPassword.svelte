@@ -14,7 +14,7 @@
     });
 
     const submit = () => {
-        $form.post(route("password.email"));
+        $form.post(window.route("password.email"));
     };
 </script>
 

@@ -7,7 +7,7 @@
     const form = useForm({});
 
     const submit = () => {
-        $form.post(route("verification.send"));
+        $form.post(window.route("verification.send"));
     };
 
     const verificationLinkSent = status === "verification-link-sent";
@@ -34,13 +34,13 @@
     <div class="mt-4 flex items-center justify-between">
         <PrimaryButton
             class={$form.processing ? "opacity-25" : ""}
-            :disabled="form.processing"
+            disabled={form.processing}
         >
             Resend Verification Email
         </PrimaryButton>
 
         <Link
-            href={route("logout")}
+            href={window.route("logout")}
             method="post"
             as="button"
             class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"

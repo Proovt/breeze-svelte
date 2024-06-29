@@ -30,7 +30,7 @@
     </header>
 
     <form
-        on:submit|preventDefault={$form.patch(route("profile.update"))}
+        on:submit|preventDefault={$form.patch(window.route("profile.update"))}
         class="mt-6 space-y-6"
     >
         <div>
@@ -69,7 +69,7 @@
                 <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
                     Your email address is unverified.
                     <Link
-                        href={route("verification.send")}
+                        href={window.route("verification.send")}
                         method="post"
                         as="button"
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"

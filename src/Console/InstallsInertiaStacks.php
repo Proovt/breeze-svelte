@@ -179,7 +179,7 @@ trait InstallsInertiaStacks
     protected function installInertiaSvelteStack()
     {
         // Install Inertia...
-        if (!$this->requireComposerPackages(['inertiajs/inertia-laravel:^0.6.8', 'laravel/sanctum:^3.2', 'tightenco/ziggy:^1.0'])) {
+        if (!$this->requireComposerPackages(['inertiajs/inertia-laravel:^1.0', 'laravel/sanctum:^4.0', 'tightenco/ziggy:^2.0'])) {
             return 1;
         }
 
@@ -188,11 +188,11 @@ trait InstallsInertiaStacks
             return [
                 '@inertiajs/svelte' => '^1.0.0',
                 '@tailwindcss/forms' => '^0.5.3',
-                '@sveltejs/vite-plugin-svelte' => '^2.0.2',
+                '@sveltejs/vite-plugin-svelte' => '^3.1.1',
                 'autoprefixer' => '^10.4.12',
-                'postcss' => '^8.4.18',
+                'postcss' => '^8.4.31',
                 'tailwindcss' => '^3.2.1',
-                'svelte' => '^3.55.1',
+                'svelte' => '^4.2.18',
             ] + $packages;
         });
 
@@ -205,13 +205,19 @@ trait InstallsInertiaStacks
         (new Filesystem)->copyDirectory(__DIR__ . '/../../stubs/default/app/Http/Requests', app_path('Http/Requests'));
 
         // Middleware...
-        $this->installMiddlewareAfter('SubstituteBindings::class', '\App\Http\Middleware\HandleInertiaRequests::class');
-        $this->installMiddlewareAfter('\App\Http\Middleware\HandleInertiaRequests::class', '\Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class');
+        $this->installMiddleware([
+            '\App\Http\Middleware\HandleInertiaRequests::class',
+            '\Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class',
+        ]);
 
+
+        (new Filesystem)->ensureDirectoryExists(app_path('Http/Middleware'));
         copy(__DIR__ . '/../../stubs/inertia-common/app/Http/Middleware/HandleInertiaRequests.php', app_path('Http/Middleware/HandleInertiaRequests.php'));
 
         // Views...
         copy(__DIR__ . '/../../stubs/inertia-svelte/resources/views/app.blade.php', resource_path('views/app.blade.php'));
+
+        @unlink(resource_path('views/welcome.blade.php'));
 
         // Components + Pages...
         (new Filesystem)->ensureDirectoryExists(resource_path('js/Components'));
@@ -247,14 +253,15 @@ trait InstallsInertiaStacks
         copy(__DIR__ . '/../../stubs/inertia-common/routes/auth.php', base_path('routes/auth.php'));
 
         // "Dashboard" Route...
-        $this->replaceInFile('/home', '/dashboard', app_path('Providers/RouteServiceProvider.php'));
+        // $this->replaceInFile('/home', '/dashboard', app_path('Providers/RouteServiceProvider.php'));
 
         // Tailwind / Vite...
         copy(__DIR__ . '/../../stubs/default/resources/css/app.css', resource_path('css/app.css'));
         copy(__DIR__ . '/../../stubs/inertia-svelte/postcss.config.js', base_path('postcss.config.js'));
         copy(__DIR__ . '/../../stubs/inertia-svelte/tailwind.config.js', base_path('tailwind.config.js'));
-        copy(__DIR__ . '/../../stubs/inertia-common/jsconfig.json', base_path('jsconfig.json'));
         copy(__DIR__ . '/../../stubs/inertia-svelte/vite.config.js', base_path('vite.config.js'));
+        
+        copy(__DIR__ . '/../../stubs/inertia-common/jsconfig.json', base_path('jsconfig.json'));
         copy(__DIR__ . '/../../stubs/inertia-svelte/resources/js/app.js', resource_path('js/app.js'));
 
         if ($this->option('ssr')) {

@@ -17,7 +17,7 @@
     });
 
     const submit = () => {
-        $form.post(route("login"), {
+        $form.post(window.route("login"), {
             onFinish: () => $form.reset("password"),
         });
     };
@@ -65,6 +65,7 @@
         </div>
 
         <div class="block mt-4">
+            <!-- svelte-ignore a11y-label-has-associated-control -->
             <label class="flex items-center">
                 <Checkbox name="remember" bind:checked={$form.remember} />
                 <span class="ml-2 text-sm text-gray-600 dark:text-gray-400"
@@ -76,7 +77,7 @@
         <div class="flex items-center justify-end mt-4">
             {#if canResetPassword}
                 <Link
-                    href={route("password.request")}
+                    href={window.route("password.request")}
                     class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 >
                     Forgot your password?

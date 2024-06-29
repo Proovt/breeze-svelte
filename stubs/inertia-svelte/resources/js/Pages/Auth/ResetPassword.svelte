@@ -17,7 +17,7 @@
     });
 
     const submit = () => {
-        $form.post(route("password.store"), {
+        $form.post(window.route("password.store"), {
             onFinish: () => $form.reset("password", "password_confirmation"),
         });
     };
