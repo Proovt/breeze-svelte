@@ -1,10 +1,12 @@
-import { Ziggy } from "./ziggy";
 import createServer from "@inertiajs/svelte/server";
 import { createInertiaApp } from "@inertiajs/svelte";
-import route from "../../vendor/tightenco/ziggy/dist/index.m.js";
+import { route } from '../../vendor/tightenco/ziggy';
 
-global.route = (name, params, absolute, config) =>
-    route(name, params, absolute, Ziggy);
+global.route = (name, params, absolute) =>
+    route(name, params, absolute, {
+        ...page.props.ziggy,
+        location: new URL(page.props.ziggy.location),
+    });
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
