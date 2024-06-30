@@ -1,6 +1,6 @@
 {
     "name": "proovt/breeze-svelte",
-    "description": "Minimal Laravel authentication scaffolding with Svelte and Tailwind.",
+    "description": "Minimal Laravel 11 authentication scaffolding with Svelte and Tailwind.",
     "keywords": [
         "laravel",
         "auth",
@@ -8,8 +8,8 @@
     ],
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/tapan288/breeze-svelte/issues",
-        "source": "https://github.com/tapan288/breeze-svelte"
+        "issues": "https://github.com/proovt/breeze-svelte/issues",
+        "source": "https://github.com/proovt/breeze-svelte"
     },
     "authors": [
         {
@@ -19,6 +19,10 @@
         {
             "name": "Tapan Sharma",
             "email": "tapansharma69@gmail.com"
+        },
+        {
+            "name": "Proovt",
+            "email": "business.proovt@gmail.com"
         }
     ],
     "require": {
