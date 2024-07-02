@@ -1,17 +1,5 @@
 <p align="center"><img src="/art/logo.svg" alt="Logo Laravel Breeze"></p>
 
-<p align="center">
-    <a href="https://packagist.org/packages/laravel/breeze">
-        <img src="https://img.shields.io/packagist/dt/tapansharma/breeze-svelte" alt="Total Downloads">
-    </a>
-    <a href="https://packagist.org/packages/tapansharma/breeze-svelte">
-        <img src="https://img.shields.io/packagist/v/tapansharma/breeze-svelte" alt="Latest Stable Version">
-    </a>
-    <a href="https://packagist.org/packages/tapansharma/breeze-svelte">
-        <img src="https://img.shields.io/packagist/l/tapansharma/breeze-svelte" alt="License">
-    </a>
-</p>
-
 # Introduction
 
 Svelte and Tailwind power this version of Laravel Breeze.
@@ -19,10 +7,25 @@ As a typical Breeze package, this publishes authentication controllers and views
 
 # Documentation
 ## Installation
-You can install the package via Composer:
+Add the `repositories` property to your `composer.json` with the following content:
+
+```json
+{
+    ...
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Proovt/breeze-svelte.git"
+        }
+    ],
+    ...
+}
+```
+
+Then you can install the package via Composer:
 
 ```bash
-composer require tapansharma/breeze-svelte --dev
+composer require proovt/breeze-svelte --dev
 ```
 
 Everything else is the same as the original Breeze package, you can either use the interactive installer or install it manually by passing the `svelte` flag to the `php artisan breeze:install` command.
